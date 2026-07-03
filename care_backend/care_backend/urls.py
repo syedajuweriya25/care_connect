@@ -16,7 +16,27 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="CareConnect - Community Emergency Response API",
+        default_version='v1',
+        description="Backend REST APIs for the CareConnect emergency response system.",
+    ),
+    public=True,
+    # change permismission to IsAuthenticated before deploying
+    permission_classes=[permissions.AllowAny],
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # it will be used to generate the swagger.json file which will be used by the swagger-ui to display the API documentation
+    path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    # it will be used to display the API documentation in the browser
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    # it will be used to display the API documentation in the browser in a more readable format
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]

@@ -3,7 +3,6 @@ __pycache__/
 *.py[cod]
 *.egg-info/
 .eggs/
-dist/
 build/
 
 # Virtual environment
@@ -29,9 +28,16 @@ staticfiles/
 .DS_Store
 Thumbs.db
 
-# Node (for upcoming frontend apps)
+# Node
 node_modules/
 npm-debug.log*
-.expo/
 dist/
+dist-ssr/
 web-build/
+
+# Flutter / Dart
+.dart_tool/
+.packages/
+.flutter-plugins
+.flutter-plugins-dependencies
+build/

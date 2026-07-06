@@ -3,7 +3,9 @@ Django==6.0.6
 django-environ==0.14.0
 djangorestframework==3.17.1
 djangorestframework_simplejwt==5.5.1
+drf-yasg==1.21.7
 psycopg2-binary==2.9.12
 PyJWT==2.13.0
-sqlparse==0.5.5
+sqlparse==3.0.2
 tzdata==2026.2
+django-cors-headers==4.0.0

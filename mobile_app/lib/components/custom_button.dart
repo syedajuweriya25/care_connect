@@ -4,20 +4,20 @@ import 'package:flutter/material.dart';
 class CustomButton extends StatelessWidget {
   final String label;
   final VoidCallback onPressed;
-  final bool help_needed;
+  final bool helpNeeded;
 
   const CustomButton({
     super.key,
     required this.label,
     required this.onPressed,
-    this.help_needed = false,
+    this.helpNeeded = false,
   });
 
   @override
   Widget build(BuildContext context) {
     // Looks up primary blue or emergency red dynamically from our design token mapping
-    final Color buttonColor = help_needed    
-        ? Theme.of(context).colorScheme.error 
+    final Color buttonColor = helpNeeded
+        ? Theme.of(context).colorScheme.error
         : Theme.of(context).colorScheme.primary;
 
     return FilledButton(

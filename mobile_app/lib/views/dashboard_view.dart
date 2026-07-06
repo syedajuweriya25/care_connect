@@ -1,11 +1,33 @@
 import 'package:flutter/material.dart';
-// This file is used to display the dashboard for the mobile app
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:go_router/go_router.dart';
+
 class DashboardView extends StatelessWidget {
-  // This is the constructor for the DashboardView
   const DashboardView({super.key});
-  // This is the build method for the DashboardView
+
+  Future<void> _logout(BuildContext context) async {
+    const storage = FlutterSecureStorage();
+    await storage.delete(key: 'access_token');
+    await storage.delete(key: 'refresh_token');
+    if (context.mounted) context.go('/login');
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: Center(child: Text("CareConnect Mobile Dashboard")));
+    return Scaffold(
+      appBar: AppBar(title: const Text('CareConnect Dashboard')),
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('Secure dashboard ready', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8),
+            const Text('Your authenticated session is active.'),
+            const SizedBox(height: 16),
+            FilledButton(onPressed: () => _logout(context), child: const Text('Logout')),
+          ],
+        ),
+      ),
+    );
   }
 }

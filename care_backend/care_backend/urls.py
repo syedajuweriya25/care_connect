@@ -14,11 +14,24 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include, re_path
+from django.views.static import serve as static_serve
 from rest_framework import permissions
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+
+class HealthCheckView(APIView):
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self, request):
+        return Response({'status': 'ok', 'service': 'care_backend'})
+
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -33,10 +46,18 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # it will be used to generate the swagger.json file which will be used by the swagger-ui to display the API documentation
-    path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    # it will be used to display the API documentation in the browser
+    path('health/', HealthCheckView.as_view(), name='health-check'),
+    path('api/auth/', include('users.urls')),
+    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    # it will be used to display the API documentation in the browser in a more readable format
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+elif settings.SERVE_STATIC_FILES:
+    urlpatterns += [
+        re_path(r'^static/(?P<path>.*)$', static_serve, {
+            'document_root': settings.STATIC_ROOT,
+        }),
+    ]

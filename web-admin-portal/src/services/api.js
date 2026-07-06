@@ -3,7 +3,7 @@ import axios from 'axios';
 // region API Configuration
 const api = axios.create({
   // it will be used to set the base URL for the API
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000',
   // it will be used to set the headers for the API
   headers: {
     'Content-Type': 'application/json',
